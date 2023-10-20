@@ -2,7 +2,6 @@
 //? read about path library
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
-const uuid = uuidv4();
 class ProductManager {
     constructor(products, path) {
         this.products = products;
@@ -17,7 +16,7 @@ class ProductManager {
             console.log('All fields are mandatory');
             return;
         }
-        product.id = uuid;
+        product.id = uuidv4();
         let values = {
             title: product.title,
             description: product.description,
@@ -27,27 +26,31 @@ class ProductManager {
             stock: product.stock,
             id: product.id
         };
-        fs.writeFile(this.path, JSON.stringify(values), (error) => {
-            if (error) {
-                throw new Error(`404: Error writing file ${error}`);
-            }
-            else {
+        this.products.push(values);
+        try {
+            if (this.path) {
+                fs.writeFileSync(this.path, JSON.stringify(values) + '\n');
                 console.log('201: File created successfully');
             }
-        });
-        this.products.push(values);
+            else {
+                fs.appendFileSync(this.path, JSON.stringify(values) + '\n');
+            }
+        }
+        catch (error) {
+            throw new Error(`404: Error writing file ${error}`);
+        }
     }
     getProducts() {
-        let result = fs.readFile(this.path, 'utf-8', (error) => {
-            if (error) {
-                throw new Error(`404: Error reading file ${error}`);
+        try {
+            const readFile = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
+            if (!readFile) {
             }
-            else {
-                console.log('200: File successfully read');
-            }
-        });
-        console.log('getProducts reading', result);
-        return result;
+            console.log('200: File successfully read.');
+            return readFile;
+        }
+        catch (error) {
+            throw new Error(`${error}`);
+        }
     }
     getProductById(productId) {
         const foundProduct = this.products.find(p => p.id === productId);
@@ -56,6 +59,28 @@ class ProductManager {
         }
         else {
             console.log('Not found');
+            return undefined;
+        }
+    }
+    deleteProduct(productId) {
+        const foundProduct = this.products.find(p => p.id === productId);
+        if (foundProduct) {
+            fs.unlink(this.path, (error) => {
+                throw new Error(`${error === null || error === void 0 ? void 0 : error.message}`);
+            });
+        }
+        else {
+            console.log('Could not delete; Product ID not found');
+            return undefined;
+        }
+    }
+    updateProduct(productId) {
+        const foundProduct = this.products.find(p => p.id === productId);
+        if (foundProduct) {
+            fs.writeFileSync(this.path, 'utf-8');
+        }
+        else {
+            console.log('Could not delete; Product ID not found');
             return undefined;
         }
     }
@@ -68,22 +93,21 @@ const product1 = {
     thumbnail: 'product1.jpg',
     code: 'P1',
     stock: 150,
-    id: '',
+    id: uuidv4(),
 };
-productManager.addProducts(product1);
-console.log('Products: ', productManager.getProducts());
-const productById1 = productManager.getProductById(product1.id);
-console.log(productById1);
 const product2 = {
     title: 'Product 2',
     description: 'Description for Product 2',
-    price: 15,
+    price: 20,
     thumbnail: 'product2.jpg',
-    code: 'P3',
+    code: 'P2',
     stock: 300,
-    id: '',
+    id: uuidv4(),
 };
+productManager.addProducts(product1);
 productManager.addProducts(product2);
-console.log('Products: ', productManager.getProducts());
+console.log('ALL PRODUCTS: ', productManager.getProducts());
+const productById1 = productManager.getProductById(product1.id);
 const productById2 = productManager.getProductById(product2.id);
-console.log(productById2);
+console.log('PRODUCT 1 BY ID:', productById1);
+console.log('PRODUCT 2 BY ID:', productById2);
