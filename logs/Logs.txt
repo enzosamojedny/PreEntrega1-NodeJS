@@ -1,0 +1,1 @@
+{"title":"Product 2","description":"Description for Product 2","price":15,"thumbnail":"product2.jpg","code":"P3","stock":300,"id":"61b09436-3a46-4897-b644-fc708fa0283e"}
