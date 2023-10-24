@@ -1,5 +1,3 @@
-//? how to apply crypto library to my project?
-//? read about path library
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 class ProductManager {
@@ -7,7 +5,7 @@ class ProductManager {
         this.products = products;
         this.path = path;
     }
-    addProducts(product) {
+    addProduct(product) {
         const existingProduct = this.products.find(p => p.code === product.code);
         if (existingProduct) {
             console.log('A product with that code already exists');
@@ -28,13 +26,7 @@ class ProductManager {
         };
         this.products.push(values);
         try {
-            if (this.path) {
-                fs.writeFileSync(this.path, JSON.stringify(values) + '\n');
-                console.log('201: File created successfully');
-            }
-            else {
-                fs.appendFileSync(this.path, JSON.stringify(values) + '\n');
-            }
+            fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2));
         }
         catch (error) {
             throw new Error(`404: Error writing file ${error}`);
@@ -63,24 +55,26 @@ class ProductManager {
         }
     }
     deleteProduct(productId) {
-        const foundProduct = this.products.find(p => p.id === productId);
-        if (foundProduct) {
-            fs.unlink(this.path, (error) => {
-                throw new Error(`${error === null || error === void 0 ? void 0 : error.message}`);
-            });
+        const deletedProduct = this.products.filter(p => p.id !== productId);
+        if (deletedProduct) {
+            this.products = deletedProduct;
+            fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2));
+            console.log('Product deleted successfully');
         }
         else {
             console.log('Could not delete; Product ID not found');
             return undefined;
         }
     }
-    updateProduct(productId) {
-        const foundProduct = this.products.find(p => p.id === productId);
-        if (foundProduct) {
-            fs.writeFileSync(this.path, 'utf-8');
+    updateProduct(productId, updatedProduct) {
+        const productToUpdate = this.products.find(p => p.id === productId);
+        if (productToUpdate) {
+            Object.assign(productToUpdate, updatedProduct);
+            fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2));
+            return productToUpdate;
         }
         else {
-            console.log('Could not delete; Product ID not found');
+            console.log('Could not delete; Product not found');
             return undefined;
         }
     }
@@ -104,10 +98,12 @@ const product2 = {
     stock: 300,
     id: uuidv4(),
 };
-productManager.addProducts(product1);
-productManager.addProducts(product2);
+productManager.addProduct(product1);
+productManager.addProduct(product2);
 console.log('ALL PRODUCTS: ', productManager.getProducts());
 const productById1 = productManager.getProductById(product1.id);
 const productById2 = productManager.getProductById(product2.id);
 console.log('PRODUCT 1 BY ID:', productById1);
 console.log('PRODUCT 2 BY ID:', productById2);
+// productManager.deleteProduct(product1.id) 
+// productManager.updateProduct(product1.id, {title:'Juan Carlos'})
