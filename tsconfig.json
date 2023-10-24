@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "moduleResolution": "node",
-        "target": "es6",
+        "target": "esnext",
+        "module": "esnext",
         "outDir": "src",
         "strict": true,
         "forceConsistentCasingInFileNames": true
