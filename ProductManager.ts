@@ -1,34 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
-import * as express from 'express';
+import express from 'express';
 import * as http from 'http';
 import axios from 'axios';
+
+
 // function encrypt(value:number,salt:number){
 //     crypto.createHmac('sha256',salt).update(value).digest('hex')
 // }
-async function getServer() {
-    const server = http.createServer((req, res) => {
-      console.log('Server created!');
-    });
-    server.listen(8080, () => {
-      console.log('Connected to port 8080');
-    });
-    const port = '8080';
-    const domain = 'http://localhost'; 
-    const path = '/create';
-    const query = 'curso-backend';
-    const url = `${domain}:${port}${path}?${query}`;
-    try {
-      const response = await axios.get(url);
-      console.log('Response:', response.data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-  
-  // Call the async function
-  getServer();
+const app = express()
+app.get('/create',(req,res)=>{
+    res.send('Server created from express')
+})
+app.listen(8080,()=>{
+    console.log('Server mounted in port 8080')
+})
 interface ProductInterface{
     title:string,
     description:string,

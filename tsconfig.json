@@ -5,7 +5,8 @@
         "module": "esnext",
         "outDir": "src",
         "strict": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "**.ts"

@@ -6,7 +6,7 @@
     "thumbnail": "product1.jpg",
     "code": "P1",
     "stock": 150,
-    "id": "08e76a86-a9c2-4509-80ef-15f15dbf5862"
+    "id": "d24ab29a-c1df-453e-a1cb-1edca43c2be2"
   },
   {
     "title": "Product 2",
@@ -15,6 +15,6 @@
     "thumbnail": "product2.jpg",
     "code": "P2",
     "stock": 300,
-    "id": "6fad88c8-4927-4a7f-a0bd-bd7d2e5c871b"
+    "id": "c1151d1a-9ab3-4397-8227-f4849ed31f64"
   }
 ]
