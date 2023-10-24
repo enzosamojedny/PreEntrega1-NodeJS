@@ -120,6 +120,6 @@ const product2:ProductInterface = {
   console.log('PRODUCT 1 BY ID:',productById1)
   console.log('PRODUCT 2 BY ID:',productById2)
 
-// productManager.deleteProduct(product1.id) 
+ //productManager.deleteProduct(product1.id) 
 
-// productManager.updateProduct(product1.id, {title:'Juan Carlos'})
+ //productManager.updateProduct(product1.id, {description:'Esta es una description actualizada'})

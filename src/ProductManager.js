@@ -105,5 +105,5 @@ const productById1 = productManager.getProductById(product1.id);
 const productById2 = productManager.getProductById(product2.id);
 console.log('PRODUCT 1 BY ID:', productById1);
 console.log('PRODUCT 2 BY ID:', productById2);
-// productManager.deleteProduct(product1.id) 
-// productManager.updateProduct(product1.id, {title:'Juan Carlos'})
+//productManager.deleteProduct(product1.id) 
+//productManager.updateProduct(product1.id, {description:'Esta es una description actualizada'})
